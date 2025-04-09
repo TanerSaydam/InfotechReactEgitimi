@@ -1,5 +1,13 @@
 # Infotect React Eğitimi
 
+## 09.04.2025
+- React frameworkleri nelerdir
+- Vite framework ile React app oluşturma
+- .NET WebAPI projesi oluşturma
+- API ile çalışma (Fetch kullanımı)
+- API ile Create, Read, Delete işlemleri yaptık
+- Ödev: Update metodunu hem backend de hem React trafında yazın
+
 ## 07.04.2025
 - React nedir
 - İlk React projemizi oluşturalım
@@ -9,9 +17,3 @@
 - Değişken oluşturma ve use state hook kullanımı
 - Değişken değerini yakalama ve set etme
 - Eventler
-
-## 09.04.2025
-- React frameworkleri nelerdir
-- Vite framework ile React app oluşturma
-- .NET WebAPI projesi oluşturma
-- API ile çalışma (Fetch kullanımı)

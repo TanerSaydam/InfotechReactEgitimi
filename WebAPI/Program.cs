@@ -41,10 +41,25 @@ app.MapPost("/todos",
         {
             Work = request.Work,
         };
-        context.Todos.Add(todo);
+        context.Add(todo);
         await context.SaveChangesAsync(cancellationToken);
 
         return Results.Created();
+    });
+
+app.MapDelete("/todos/{id}",
+    async (Guid id, ApplicationDbContext context, CancellationToken cancellationToken) =>
+    {
+        Todo? todo = await context.Todos.FindAsync(id, cancellationToken);
+        if (todo is null)
+        {
+            return Results.NotFound();
+        }
+
+        context.Remove(todo);
+        await context.SaveChangesAsync(cancellationToken);
+
+        return Results.NoContent();
     });
 
 app.Run();
