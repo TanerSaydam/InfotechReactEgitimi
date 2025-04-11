@@ -1,5 +1,9 @@
 # Infotect React Eğitimi
 
+## 11.04.2025
+- Todo projemize Update metodunu hem backend de hem React'da yazdık
+- React da if blogu ile nasıl şart yazacağımızı öğrendik
+
 ## 09.04.2025
 - React frameworkleri nelerdir
 - Vite framework ile React app oluşturma

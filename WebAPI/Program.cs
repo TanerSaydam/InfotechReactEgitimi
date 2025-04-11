@@ -47,6 +47,22 @@ app.MapPost("/todos",
         return Results.Created();
     });
 
+app.MapPut("/todos",
+    async (UpdateTodoDto request, ApplicationDbContext context, CancellationToken cancellationToken) =>
+    {
+        Todo? todo = await context.Todos.FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+        if (todo is null)
+        {
+            return Results.NotFound();
+        }
+
+        todo.Work = request.Work;
+        context.Update(todo);
+        await context.SaveChangesAsync(cancellationToken);
+
+        return Results.Created();
+    });
+
 app.MapDelete("/todos/{id}",
     async (Guid id, ApplicationDbContext context, CancellationToken cancellationToken) =>
     {
