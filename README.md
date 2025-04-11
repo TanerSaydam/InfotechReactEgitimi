@@ -3,6 +3,11 @@
 ## 11.04.2025
 - Todo projemize Update metodunu hem backend de hem React'da yazdık
 - React da if blogu ile nasıl şart yazacağımızı öğrendik
+- Yeni component oluşturma
+- İç içe component kullanımı (Nested component)
+- Props (Componentler arası veri iletimi)
+- Ödev: Parçaladığımız componentlere akarabildiğiniz kadar değişken ve metotları taşıyın. Todo.jsx'de olabildiğince az kod barındırın
+- Ödev2: Tekli kontrol için kullanılan ?? veya || arasındaki fark nedir?
 
 ## 09.04.2025
 - React frameworkleri nelerdir

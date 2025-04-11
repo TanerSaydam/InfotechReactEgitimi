@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client'
-import App from './App'
+import Todo from './Todos/Todo'
 
 createRoot(document.getElementById('root')).render(
-  <App />
+  <Todo />
 )
