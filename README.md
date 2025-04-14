@@ -3,6 +3,18 @@
 ## Documentatin
 - [ ] Vite : https://vite.dev/
 - [ ] React Router : https://reactrouter.com/
+- [ ] Bootstrap : https://getbootstrap.com/
+
+## 14.04.2025
+- Router yapısını tekrar ettik
+- Layout yapısı ile router nasıl kullanılır onu inceledik
+- Günümüz admni panelli projelerin layout yapısını simüle ettik
+- Bootstrap gibi external css kütüphanelerini porjeye nasıl dahil edeceğimizi öğrendik
+- Boostrap kullanarak örnek bir login sayfası tasarladık
+- Login sayfasında form elementi kullanıp artıları ve eksilerinden bahsettim
+- Validation kontrolü form elementi ile yaptık
+- Giriş esnasında token saklamanın doğru yeri hakkında konuştuk
+- Fake veri ile örnek bir giriş yaptık
 
 ## 11.04.2025
 - Todo projemize Update metodunu hem backend de hem React'da yazdık
