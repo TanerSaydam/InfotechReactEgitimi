@@ -5,6 +5,75 @@
 - [ ] React Router : https://reactrouter.com/
 - [ ] Bootstrap : https://getbootstrap.com/
 
+## i18n Kurulumu
+```bash
+npm install i18next react-i18next i18next-http-backend i18next-browser-languagedetector
+```
+
+- Dosya adı: i18n.js
+```js
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import HttpBackend from 'i18next-http-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+i18n
+  .use(HttpBackend)
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'en',
+    debug: true,
+    interpolation: {
+      escapeValue: false,
+    },
+    backend: {
+      loadPath: '/locales/{{lng}}/translation.json',
+    },
+  });
+
+export default i18n;
+```
+
+- İmport edilişi
+```js
+//main.jsx ya da index.jsx başına eklememiz yeterli
+import './i18n';
+```
+
+- Örnek Kullanımı
+```js
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
+function Home() {
+    const { t, i18n } = useTranslation();
+
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+        localStorage.setItem("lang", lng);
+    };
+
+    useEffect(() => {
+        i18n.changeLanguage(localStorage.getItem("lang"));
+    }, []);
+
+    return (
+        <>
+            <button onClick={() => changeLanguage('en')}>{t("LANGUAGE.EN")}</button>
+            <button onClick={() => changeLanguage('tr')}>{t("LANGUAGE.TR")}</button>
+
+            <h1>{t('HELLO_WORLD')}</h1>
+        </>
+    )
+}
+
+export default Home;
+```
+
+## 15.04.2025
+- React'a çoklu dil yapısı ekleme
+
 ## 14.04.2025
 - Router yapısını tekrar ettik
 - Layout yapısı ile router nasıl kullanılır onu inceledik
