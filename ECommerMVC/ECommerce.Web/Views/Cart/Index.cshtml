@@ -1,0 +1,151 @@
+@model ECommerce.Core.Entities.Cart
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container py-5">
+    <h1 class="mb-4">Shopping Cart</h1>
+
+    @if (Model?.Items != null && Model.Items.Any())
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="row mb-4 cart-item" data-product-id="@item.ProductId">
+                                <div class="col-md-3">
+                                    <img src="@item.Product.ImageUrl" class="img-fluid rounded" alt="@item.Product.Name">
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="mb-1">@item.Product.Name</h5>
+                                            <p class="text-muted mb-2">@item.Product.Description</p>
+                                            <p class="mb-0"><strong>Price:</strong> $@item.UnitPrice.ToString("N2")</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-danger remove-item">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div class="mt-3 d-flex align-items-center">
+                                        <div class="input-group" style="width: 150px;">
+                                            <button class="btn btn-outline-secondary decrease-quantity" type="button">-</button>
+                                            <input type="number" class="form-control text-center quantity-input" value="@item.Quantity" min="1">
+                                            <button class="btn btn-outline-secondary increase-quantity" type="button">+</button>
+                                        </div>
+                                        <span class="ms-3 h5 mb-0">Total: $@((item.UnitPrice * item.Quantity).ToString("N2"))</span>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (Model.Items.Last() != item)
+                            {
+                                <hr>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Order Summary</h5>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal:</span>
+                            <span>$@Model.Items.Sum(i => i.UnitPrice * i.Quantity).ToString("N2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Shipping:</span>
+                            <span>Free</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <strong>Total:</strong>
+                            <strong>$@Model.Items.Sum(i => i.UnitPrice * i.Quantity).ToString("N2")</strong>
+                        </div>
+                        <a href="/Order/Checkout" class="btn btn-primary w-100">Proceed to Checkout</a>
+                        <a href="/" class="btn btn-outline-secondary w-100 mt-2">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
+            <h2>Your cart is empty</h2>
+            <p class="text-muted">Looks like you haven't added any items to your cart yet.</p>
+            <a href="/" class="btn btn-primary">Start Shopping</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Remove item from cart
+            $('.remove-item').click(function() {
+                var cartItem = $(this).closest('.cart-item');
+                var productId = cartItem.data('product-id');
+
+                $.post('/Cart/RemoveFromCart', { productId: productId })
+                    .done(function(response) {
+                        if (response.success) {
+                            cartItem.fadeOut(function() {
+                                cartItem.remove();
+                                if ($('.cart-item').length === 0) {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    });
+            });
+
+            // Update quantity
+            function updateQuantity(productId, quantity) {
+                $.post('/Cart/UpdateQuantity', { productId: productId, quantity: quantity })
+                    .done(function(response) {
+                        if (!response.success) {
+                            alert('Error: ' + response.message);
+                        }
+                    });
+            }
+
+            // Increase quantity
+            $('.increase-quantity').click(function() {
+                var input = $(this).siblings('.quantity-input');
+                var newValue = parseInt(input.val()) + 1;
+                input.val(newValue);
+                var productId = $(this).closest('.cart-item').data('product-id');
+                updateQuantity(productId, newValue);
+            });
+
+            // Decrease quantity
+            $('.decrease-quantity').click(function() {
+                var input = $(this).siblings('.quantity-input');
+                var newValue = parseInt(input.val()) - 1;
+                if (newValue >= 1) {
+                    input.val(newValue);
+                    var productId = $(this).closest('.cart-item').data('product-id');
+                    updateQuantity(productId, newValue);
+                }
+            });
+
+            // Manual quantity input
+            $('.quantity-input').change(function() {
+                var value = parseInt($(this).val());
+                if (value < 1) {
+                    $(this).val(1);
+                    value = 1;
+                }
+                var productId = $(this).closest('.cart-item').data('product-id');
+                updateQuantity(productId, value);
+            });
+        });
+    </script>
+} 

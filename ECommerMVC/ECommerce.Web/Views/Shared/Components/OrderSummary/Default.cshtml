@@ -1,0 +1,38 @@
+@using ECommerce.Core.Entities
+@model Cart
+
+@if (Model?.Items?.Any() == true)
+{
+    <div class="list-group mb-3">
+        @foreach (var item in Model.Items)
+        {
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="my-0">@item.Product.Name</h6>
+                        <small class="text-muted">Quantity: @item.Quantity</small>
+                    </div>
+                    <span class="text-muted">$@((item.Quantity * item.UnitPrice).ToString("N2"))</span>
+                </div>
+            </div>
+        }
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+                <h6 class="my-0">Shipping</h6>
+                <span class="text-muted">Free</span>
+            </div>
+        </div>
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+                <h6 class="my-0">Total</h6>
+                <strong>$@Model.Items.Sum(i => i.Quantity * i.UnitPrice).ToString("N2")</strong>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Your cart is empty. Please add some items before proceeding to checkout.
+    </div>
+} 

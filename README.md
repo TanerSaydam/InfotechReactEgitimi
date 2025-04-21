@@ -71,6 +71,14 @@ function Home() {
 export default Home;
 ```
 
+## 23.04.2025
+- eTicaret projemizin .NET Clean Arch ile Backedini yazmaya başlayacağız
+
+## 21.04.2025
+- AI ile MVC e Ticaret Projesi oluşturduk
+- AI ile e Ticaret HTML CSS tasarımı yaptık
+- React projesi oluşturup AI ile oluşturduğumuz eTicaret temasını React projemize giydirdik
+
 ## 15.04.2025
 - React'a çoklu dil yapısı ekleme
 

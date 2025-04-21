@@ -1,0 +1,98 @@
+﻿@using ECommerce.Business.Interfaces
+@inject ICartService CartService
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var userId = HttpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true
+        ? HttpContextAccessor.HttpContext.User.Identity.Name
+        : "anonymous"; // veya cookie üzerinden ID alınıyorsa o şekilde
+    var cart = await CartService.GetCartAsync("temp-user");
+    var count = cart.Items.Count();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ECommerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="/">ECommerce</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Product/Index">Products</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex me-3">
+                        <input class="form-control me-2" type="search" placeholder="Search products...">
+                        <button class="btn btn-light" type="submit">Search</button>
+                    </form>
+                    <div class="d-flex align-items-center">
+                        <a href="/Cart/Index" class="btn btn-light me-2">
+                            <i class="bi bi-cart"></i>
+                            <span class="badge bg-danger">@count</span>
+                        </a>
+                        <a href="#" class="btn btn-light">
+                            <i class="bi bi-person"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="footer bg-light mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>Your trusted source for quality products.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-dark">Privacy Policy</a></li>
+                        <li><a href="#" class="text-dark">Terms of Service</a></li>
+                        <li><a href="#" class="text-dark">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#" class="text-dark me-2"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-dark me-2"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2024 ECommerce. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

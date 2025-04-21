@@ -1,0 +1,85 @@
+.hero-section {
+    background-color: #f8f9fa;
+    padding: 2rem 0;
+}
+
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.category-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+}
+
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.special-offer {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    padding: 3rem 0;
+    color: white;
+    margin: 3rem 0;
+}
+
+.footer {
+    background-color: #343a40;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 3rem 0;
+}
+
+.footer a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: white;
+}
+
+.social-icons a {
+    margin-right: 1rem;
+    font-size: 1.5rem;
+}
+
+.newsletter-form .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.newsletter-form .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.carousel-item {
+    height: 400px;
+}
+
+.carousel-item img {
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .carousel-item {
+        height: 300px;
+    }
+}

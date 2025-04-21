@@ -1,0 +1,86 @@
+@using ECommerce.Core.Entities
+@model Order
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="mb-4">Checkout</h2>
+            <form asp-action="Checkout" method="post">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Shipping Information</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="ShippingName" class="form-label">Full Name</label>
+                                <input asp-for="ShippingName" class="form-control" required>
+                                <span asp-validation-for="ShippingName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ShippingEmail" class="form-label">Email</label>
+                                <input asp-for="ShippingEmail" type="email" class="form-control" required>
+                                <span asp-validation-for="ShippingEmail" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ShippingPhone" class="form-label">Phone</label>
+                                <input asp-for="ShippingPhone" class="form-control" required>
+                                <span asp-validation-for="ShippingPhone" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="ShippingAddress" class="form-label">Address</label>
+                                <input asp-for="ShippingAddress" class="form-control" required>
+                                <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ShippingCity" class="form-label">City</label>
+                                <input asp-for="ShippingCity" class="form-control" required>
+                                <span asp-validation-for="ShippingCity" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ShippingZipCode" class="form-label">ZIP Code</label>
+                                <input asp-for="ShippingZipCode" class="form-control" required>
+                                <span asp-validation-for="ShippingZipCode" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Payment Method</h5>
+                        <div class="mb-3">
+                            <select asp-for="PaymentMethod" class="form-select" required>
+                                <option value="">Select payment method</option>
+                                <option value="CreditCard">Credit Card</option>
+                                <option value="BankTransfer">Bank Transfer</option>
+                                <option value="PayPal">PayPal</option>
+                            </select>
+                            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Place Order</button>
+                    <a href="/Cart" class="btn btn-outline-secondary">Back to Cart</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Order Summary</h5>
+                    @await Component.InvokeAsync("OrderSummary")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

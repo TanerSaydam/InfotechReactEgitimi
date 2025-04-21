@@ -1,0 +1,201 @@
+.progress-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #e9ecef;
+    font-weight: bold;
+}
+
+.progress-step.active {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.progress-step.completed {
+    background-color: #198754;
+    color: white;
+    border-color: #198754;
+}
+
+/* Checkout form styles */
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--bs-primary);
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom form element styles */
+.form-control:focus,
+.form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-color: #86b7fe;
+}
+
+textarea {
+    resize: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .sticky-lg-top {
+        position: relative;
+        top: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .progress-step {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+}
+
+
+.payment-tabs {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.payment-tabs .nav-link {
+    border: none;
+    padding: 0.75rem 1rem;
+    color: #6c757d;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    background-color: transparent;
+    transition: all 0.2s;
+}
+
+.payment-tabs .nav-link:hover {
+    border-bottom-color: rgba(13, 110, 253, 0.3);
+    color: #0d6efd;
+}
+
+.payment-tabs .nav-link.active {
+    color: #0d6efd;
+    background-color: transparent;
+    border-bottom-color: #0d6efd;
+}
+
+/* Card styles */
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Form styles */
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.input-group-text {
+    border-right: 0;
+}
+
+.input-group-text+.form-control {
+    border-left: 0;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-color: #86b7fe;
+}
+
+.input-group:focus-within {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-radius: 0.25rem;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--bs-primary);
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .sticky-lg-top {
+        position: relative;
+        top: 0 !important;
+    }
+
+    .payment-tabs .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .payment-tabs {
+        flex-direction: column;
+        border-bottom: none;
+    }
+
+    .payment-tabs .nav-link {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+        text-align: left;
+        margin-bottom: 5px;
+    }
+
+    .payment-tabs .nav-link.active {
+        border-bottom: none;
+        border-left-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+
+    .payment-tabs .nav-link:hover {
+        border-bottom: none;
+        border-left-color: rgba(13, 110, 253, 0.3);
+    }
+}
+
+@media (max-width: 576px) {
+    .progress-step {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+}
