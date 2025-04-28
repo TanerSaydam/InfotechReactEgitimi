@@ -1,4 +1,19 @@
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
+
 function Home() {
+    const [categories, setCategories] = useState([]);
+
+    async function getCategories() {
+        const response = await axios.get("https://localhost:7159/categories");
+        setCategories(response.data);
+    };
+
+    useEffect(() => {
+        getCategories();
+    },[]);
+
     return (
         <>
             {/* Hero Section with Carousel */}
@@ -90,78 +105,21 @@ function Home() {
             <div className="container my-5">
                 <h2 className="text-center mb-4">Popüler Kategoriler</h2>
                 <div className="row">
-                    <div className="col-6 col-md-4 col-lg-2">
-                        <div className="category-item shadow-sm">
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/200/200"
-                                className="img-fluid"
-                                alt="Elektronik"
-                            />
-                            <div className="category-overlay">
-                                <h5 className="m-0">Elektronik</h5>
+                    {categories.map((val,i) => {
+                       return(<div className="col-6 col-md-4 col-lg-3" key={i}>
+                            <div className="category-item shadow-sm">
+                                <img
+                                    src={"https://localhost:7159/images/" + val.imageUrl}
+                                    className="img-fluid"
+                                    alt={val.name}
+                                    style={{ width: "300px", height: "300px", objectFit: "cover" }}
+                                />
+                                <div className="category-overlay">
+                                    <h5 className="m-0">{val.name}</h5>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="col-6 col-md-4 col-lg-2">
-                        <div className="category-item shadow-sm">
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/200/200"
-                                className="img-fluid"
-                                alt="Giyim"
-                            />
-                            <div className="category-overlay">
-                                <h5 className="m-0">Giyim</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-6 col-md-4 col-lg-2">
-                        <div className="category-item shadow-sm">
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/200/200"
-                                className="img-fluid"
-                                alt="Ev & Yaşam"
-                            />
-                            <div className="category-overlay">
-                                <h5 className="m-0">Ev &amp; Yaşam</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-6 col-md-4 col-lg-2">
-                        <div className="category-item shadow-sm">
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/200/200"
-                                className="img-fluid"
-                                alt="Spor"
-                            />
-                            <div className="category-overlay">
-                                <h5 className="m-0">Spor</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-6 col-md-4 col-lg-2">
-                        <div className="category-item shadow-sm">
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/200/200"
-                                className="img-fluid"
-                                alt="Kozmetik"
-                            />
-                            <div className="category-overlay">
-                                <h5 className="m-0">Kozmetik</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-6 col-md-4 col-lg-2">
-                        <div className="category-item shadow-sm">
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/200/200"
-                                className="img-fluid"
-                                alt="Kitap"
-                            />
-                            <div className="category-overlay">
-                                <h5 className="m-0">Kitap</h5>
-                            </div>
-                        </div>
-                    </div>
+                        </div>)
+                    })}
                 </div>
             </div>
             {/* Featured Products */}

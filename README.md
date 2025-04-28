@@ -71,6 +71,14 @@ function Home() {
 export default Home;
 ```
 
+## 28.04.2025
+- Backend de Clean Architecture Mimarisi ile eCommerce.Server projesi oluşturduk
+- Category Tablosu oluşturduk
+- Category'e Seed Data ile veri bastık
+- Category listesini React projemizde gösterdik
+- Product Tablosu oluşturduk
+- Product'a Seed Data ile veri bastık
+
 ## 23.04.2025
 - eTicaret projemizin .NET Clean Arch ile Backedini yazmaya başlayacağız
 
