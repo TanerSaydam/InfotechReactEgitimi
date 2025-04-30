@@ -3,6 +3,7 @@ using eCommerce.Application;
 using eCommerce.Application.Categories;
 using eCommerce.Application.Products;
 using eCommerce.Domain.Categories;
+using eCommerce.Domain.Dtos;
 using eCommerce.Domain.Products;
 using eCommerce.Infrastructure;
 using GenericRepository;
@@ -61,6 +62,7 @@ app.MapPost("seed-data/categories",
         Category category1 = new()
         {
             Name = "Elektronik",
+            UrlShortName = "elektronik",
             ImageUrl = "elektronik.jpeg"
         };
         categories.Add(category1);
@@ -68,6 +70,7 @@ app.MapPost("seed-data/categories",
         Category category2 = new()
         {
             Name = "Telefonlar",
+            UrlShortName = "telefonlar",
             ImageUrl = "telefonlar.jpeg"
         };
         categories.Add(category2);
@@ -75,6 +78,7 @@ app.MapPost("seed-data/categories",
         Category category3 = new()
         {
             Name = "Bilgisayarlar",
+            UrlShortName = "bilgisayarlar",
             ImageUrl = "bilgisayarlar.jpg"
         };
         categories.Add(category3);
@@ -82,6 +86,7 @@ app.MapPost("seed-data/categories",
         Category category4 = new()
         {
             Name = "Tabletler",
+            UrlShortName = "tabletler",
             ImageUrl = "tabletler.jpg"
         };
         categories.Add(category4);
@@ -93,12 +98,12 @@ app.MapPost("seed-data/categories",
     });
 
 app.MapGet("products",
-    async (ISender sender, CancellationToken cancellationToken) =>
+    async (int pageSize, int pageNumber, string? categoryUrlShortName, string OrderByPrice, ISender sender, CancellationToken cancellationToken) =>
     {
-        var response = await sender.Send(new ProductGetAllQuery(), cancellationToken);
+        var response = await sender.Send(new ProductGetAllQuery(categoryUrlShortName, pageSize, pageNumber, OrderByPrice), cancellationToken);
         return Results.Ok(response);
     })
-    .Produces<List<ProductGetAllQueryResponse>>();
+    .Produces<PaginationResult<ProductGetAllQueryResponse>>();
 
 app.MapPost("seed-data/products",
     async (
@@ -108,9 +113,19 @@ app.MapPost("seed-data/products",
         CancellationToken cancellationToken) =>
     {
         var categories = await categoryRepository.GetAll().ToListAsync(cancellationToken);
+        List<string> productImages = new()
+        {
+            "bilgisayar.jpeg",
+            "canta.jpeg",
+            "domates.jpeg",
+            "gozluk.jpeg"
+        };
         List<Product> products = new();
         for (int i = 0; i < 100; i++)
         {
+            int imageIndexNumber = new Random().Next(productImages.Count());
+
+
             int categoryIndex = new Random().Next(0, categories.Count());
             var category = categories[categoryIndex];
             Faker faker = new();
@@ -119,7 +134,7 @@ app.MapPost("seed-data/products",
                 Name = faker.Commerce.ProductName(),
                 Price = Convert.ToDecimal(faker.Commerce.Price(10, 100000)),
                 Description = faker.Commerce.ProductDescription(),
-                ImageUrl = faker.Person.Avatar,
+                ImageUrl = productImages[imageIndexNumber],
                 CategoryId = category.Id
             };
             products.Add(product);

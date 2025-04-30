@@ -9,6 +9,7 @@ public sealed class CategoryGetAllQueryResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
+    public string UrlShortName { get; set; } = default!;
     public string ImageUrl { get; set; } = default!;
 }
 
@@ -24,6 +25,7 @@ internal sealed class CategoryGetAllQueryHandler(
             {
                 Id = s.Id,
                 Name = s.Name,
+                UrlShortName = s.UrlShortName,
                 ImageUrl = s.ImageUrl,
             })
             .ToListAsync(cancellationToken);

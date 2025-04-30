@@ -71,6 +71,12 @@ function Home() {
 export default Home;
 ```
 
+## 30.04.2025
+- Product listesini React'da görüntüledik
+- Ana sayfayı tamamen bizim verilerimizden alır hale getirdik
+- Kategoriler sayfasını hazırladık
+- Products için pagination, sort, ve filter yapısı kurduk
+
 ## 28.04.2025
 - Backend de Clean Architecture Mimarisi ile eCommerce.Server projesi oluşturduk
 - Category Tablosu oluşturduk

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    <PackageReference Include="Slugify" Version="0.1.0.20570" />
     <PackageReference Include="TS.FileService" Version="9.0.0" />
     <PackageReference Include="TS.Result" Version="9.0.1" />
   </ItemGroup>

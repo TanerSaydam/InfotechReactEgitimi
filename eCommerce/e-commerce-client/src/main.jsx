@@ -44,6 +44,10 @@ const router = createBrowserRouter([
         element: <Order />
       },
       {
+        path: "/products",
+        element: <Product />
+      },
+      {
         path: "/products/:categoryId",
         element: <Product />
       },

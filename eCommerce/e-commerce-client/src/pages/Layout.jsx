@@ -1,6 +1,19 @@
-import { Outlet } from "react-router";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, Outlet } from "react-router";
 
 function Layout() {
+    const [categories, setCategories] = useState([]);
+
+    async function getCategories() {
+        const response = await axios.get("https://localhost:7159/categories");
+        setCategories(response.data);
+    };
+
+    useEffect(() => {
+        getCategories();
+    },[]);
+
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -19,9 +32,14 @@ function Layout() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link active" href="/">
+                                <Link className="nav-link active" to="/">
                                     Ana Sayfa
-                                </a>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link active" to="/products">
+                                    Ürünler
+                                </Link>
                             </li>
                             <li className="nav-item dropdown">
                                 <a
@@ -34,37 +52,21 @@ function Layout() {
                                     Kategoriler
                                 </a>
                                 <ul className="dropdown-menu">
-                                    <li>
-                                        <a className="dropdown-item" href="/products/elektronik">
-                                            Elektronik
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a className="dropdown-item"href="/products/giyim">
-                                            Giyim
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a className="dropdown-item" href="/products/yasam">
-                                            Ev &amp; Yaşam
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a className="dropdown-item" href="/products/spor">
-                                            Spor &amp; Outdoor
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a className="dropdown-item"href="/products/kozmetik">
-                                            Kozmetik
-                                        </a>
-                                    </li>
+                                    {categories.map((val,i) => {
+                                        return(
+                                            <li>
+                                                <a className="dropdown-item" href={"/products/" + val.urlShortName}>
+                                                    {val.name}
+                                                </a>
+                                            </li>
+                                        )
+                                    })}
                                 </ul>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/orders">
+                                <Link className="nav-link" to="/orders">
                                     Siparilerim
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                         <form className="d-flex me-3">
@@ -80,18 +82,18 @@ function Layout() {
                             </div>
                         </form>
                         <div className="d-flex">
-                            <a href="/my-profile" className="btn btn-outline-dark me-2">
+                            <Link to="/my-profile" className="btn btn-outline-dark me-2">
                                 <i className="bi bi-person" />
-                            </a>
-                            <a href="/login" className="btn btn-outline-dark me-2">
+                            </Link>
+                            <Link to="/login" className="btn btn-outline-dark me-2">
                                 <i className="bi bi-lock" />
-                            </a>
-                            <a href="/carts" className="btn btn-outline-dark position-relative">
+                            </Link>
+                            <Link to="/carts" className="btn btn-outline-dark position-relative">
                                 <i className="bi bi-cart" />
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     3
                                 </span>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -125,22 +127,10 @@ function Layout() {
                             <h5 className="text-white mb-4">Hızlı Bağlantılar</h5>
                             <ul className="list-unstyled">
                                 <li className="mb-2">
-                                    <a href="#">Ana Sayfa</a>
+                                    <Link to="/">Ana Sayfa</Link>
                                 </li>
                                 <li className="mb-2">
-                                    <a href="#">Ürünler</a>
-                                </li>
-                                <li className="mb-2">
-                                    <a href="#">Kampanyalar</a>
-                                </li>
-                                <li className="mb-2">
-                                    <a href="#">Yeni Gelenler</a>
-                                </li>
-                                <li className="mb-2">
-                                    <a href="#">Blog</a>
-                                </li>
-                                <li className="mb-2">
-                                    <a href="#">İletişim</a>
+                                    <Link to="/products">Ürünler</Link>
                                 </li>
                             </ul>
                         </div>

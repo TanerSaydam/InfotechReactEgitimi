@@ -1,17 +1,29 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Link } from "react-router";
 
 function Home() {
     const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
+
+    function formatToTRY(value) {
+        return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 2 }).format(value);
+    }
 
     async function getCategories() {
         const response = await axios.get("https://localhost:7159/categories");
         setCategories(response.data);
     };
 
+    async function getProducts() {
+        const response = await axios.get("https://localhost:7159/products?pageSize=8&pageNumber=1&orderByPrice=asc");
+        setProducts(response.data.data);
+    };
+
     useEffect(() => {
         getCategories();
+        getProducts();
     },[]);
 
     return (
@@ -20,7 +32,7 @@ function Home() {
             <div className="hero-section">
                 <div className="container">
                     <div id="heroCarousel" className="carousel slide" data-bs-ride="carousel">
-                        <div className="carousel-indicators">
+                        <div className="carousel-indicators" style={{backgroundColor: "#291414"}}>
                             <button
                                 type="button"
                                 data-bs-target="#heroCarousel"
@@ -41,44 +53,47 @@ function Home() {
                         <div className="carousel-inner rounded shadow">
                             <div className="carousel-item active">
                                 <img
-                                    src="https://www.claudeusercontent.com/api/placeholder/1200/400"
+                                    src="/cover1.jpg"
                                     className="d-block w-100"
                                     alt="Kampanya 1"
+                                    style={{objectFit: "contain"}}
                                 />
                                 <div className="carousel-caption d-none d-md-block">
                                     <h2>Yaz Koleksiyonu</h2>
-                                    <p>Yeni sezon ürünlerde %50'ye varan indirimler</p>
-                                    <a href="#" className="btn btn-primary">
-                                        Hemen Keşfet
-                                    </a>
+                                    <p>Yeni sezona özel tabletlerde %50'ye varan indirimler</p>
+                                    <Link to="/products/tabletler" className="btn btn-primary">
+                                        Alışverişe Başla
+                                    </Link>
                                 </div>
                             </div>
                             <div className="carousel-item">
                                 <img
-                                    src="https://www.claudeusercontent.com/api/placeholder/1200/400"
+                                    src="/cover2.png"
                                     className="d-block w-100"
                                     alt="Kampanya 2"
+                                    style={{objectFit: "contain"}}
                                 />
-                                <div className="carousel-caption d-none d-md-block">
+                                <div className="carousel-caption d-none d-md-block" style={{color: "black"}}>
                                     <h2>Elektronik Fırsatları</h2>
-                                    <p>En son teknoloji ürünlerde özel fiyatlar</p>
-                                    <a href="#" className="btn btn-primary">
+                                    <p>En son teknoloji toprak korumalı prizlerde özel fiyatlar</p>
+                                    <Link to="/products/elektronik" className="btn btn-primary">
                                         Alışverişe Başla
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="carousel-item">
                                 <img
-                                    src="https://www.claudeusercontent.com/api/placeholder/1200/400"
+                                    src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-16-finish-select-202409-6-1inch_GEO_EMEA_FMT_WHH?wid=1280&hei=492&fmt=p-jpg&qlt=80&.v=UXp1U3VDY3IyR1hNdHZwdFdOLzg1V0tFK1lhSCtYSGRqMUdhR284NTN4K0VvSjFQM0pLN0VsK2pmbVJmK1hUZDhiZjRKRUJ6ZU96N3VHVCtXdS9WdVUzdWN4ZENIZEJCc01VOW1QK3BzTGVNdlIyKy9FMURXQmRzdk1KZVhnSDh1WjFlQndWT3ZmeW5zc3dRUHliS2dB&traceId=1"
                                     className="d-block w-100"
                                     alt="Kampanya 3"
+                                    style={{objectFit: "contain"}}
                                 />
-                                <div className="carousel-caption d-none d-md-block">
-                                    <h2>Ev Dekorasyon</h2>
-                                    <p>Evinizi yenilemenin tam zamanı</p>
-                                    <a href="#" className="btn btn-primary">
-                                        Detaylar
-                                    </a>
+                                <div className="carousel-caption d-none d-md-block" style={{color: "black"}}>
+                                    <h2>Telefon</h2>
+                                    <p>Telefonlarda kaçırılmayacak fırsatlar</p>
+                                    <Link to="/products/telefonlar" className="btn btn-primary">
+                                        Alışverişe Başla
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -106,10 +121,12 @@ function Home() {
                 <h2 className="text-center mb-4">Popüler Kategoriler</h2>
                 <div className="row">
                     {categories.map((val,i) => {
-                       return(<div className="col-6 col-md-4 col-lg-3" key={i}>
+                       return(
+                       <div className="col-6 col-md-4 col-lg-3" key={i}>
+                        <Link to={"/products/" + val.urlShortName}>
                             <div className="category-item shadow-sm">
                                 <img
-                                    src={"https://localhost:7159/images/" + val.imageUrl}
+                                    src={"https://localhost:7159/images/categories/" + val.imageUrl}
                                     className="img-fluid"
                                     alt={val.name}
                                     style={{ width: "300px", height: "300px", objectFit: "cover" }}
@@ -118,312 +135,62 @@ function Home() {
                                     <h5 className="m-0">{val.name}</h5>
                                 </div>
                             </div>
-                        </div>)
+                        </Link>
+                        </div>
+                        )
                     })}
                 </div>
             </div>
             {/* Featured Products */}
             <div className="container my-5">
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Öne Çıkan Ürünler</h2>
-                    <a href="#" className="btn btn-outline-primary">
+                    <h2>Ürünler</h2>
+                    <Link to="/products" className="btn btn-outline-primary">
                         Tümünü Gör
-                    </a>
+                    </Link>
                 </div>
                 <div className="row">
-                    {/* Product 1 */}
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card product-card h-100">
-                            <div className="position-absolute top-0 end-0 p-2">
-                                <span className="badge bg-danger">-20%</span>
-                            </div>
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/300/300"
-                                className="card-img-top"
-                                alt="Ürün 1"
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">Kablosuz Kulaklık</h5>
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <span className="text-decoration-line-through text-muted me-2">
-                                            ₺1.250
-                                        </span>
-                                        <span className="fw-bold text-danger">₺999</span>
+                    {products.map((val,i) => {
+                        return(
+                            <div className="col-md-6 col-lg-3 mt-2" key={i}>
+                                <div className="card product-card h-100">
+                                    <div className="position-absolute top-0 end-0 p-2">
+                                        <span className="badge bg-danger">-20%</span>
                                     </div>
-                                    <div className="text-warning">
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-half" />
-                                        <small className="text-muted">(120)</small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary w-100">Sepete Ekle</button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product 2 */}
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card product-card h-100">
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/300/300"
-                                className="card-img-top"
-                                alt="Ürün 2"
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">Akıllı Saat</h5>
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <span className="fw-bold">₺1.899</span>
-                                    </div>
-                                    <div className="text-warning">
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star" />
-                                        <small className="text-muted">(84)</small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary w-100">Sepete Ekle</button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product 3 */}
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card product-card h-100">
-                            <div className="position-absolute top-0 end-0 p-2">
-                                <span className="badge bg-success">Yeni</span>
-                            </div>
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/300/300"
-                                className="card-img-top"
-                                alt="Ürün 3"
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">Akıllı Telefon</h5>
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <span className="fw-bold">₺12.499</span>
-                                    </div>
-                                    <div className="text-warning">
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <small className="text-muted">(215)</small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary w-100">Sepete Ekle</button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product 4 */}
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card product-card h-100">
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/300/300"
-                                className="card-img-top"
-                                alt="Ürün 4"
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">Bluetooth Hoparlör</h5>
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <span className="fw-bold">₺799</span>
-                                    </div>
-                                    <div className="text-warning">
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star" />
-                                        <i className="bi bi-star" />
-                                        <small className="text-muted">(67)</small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary w-100">Sepete Ekle</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Special Offer Banner */}
-            <div className="special-offer">
-                <div className="container">
-                    <div className="row align-items-center">
-                        <div className="col-md-6">
-                            <h2 className="display-5 fw-bold mb-3">Özel Kampanya</h2>
-                            <p className="lead mb-4">
-                                2 ürün alana 3. ürün bedava! Bu fırsatı kaçırmayın.
-                            </p>
-                            <div className="d-flex gap-3">
-                                <a href="#" className="btn btn-light btn-lg">
-                                    Kampanya Detayları
-                                </a>
-                                <a href="#" className="btn btn-outline-light btn-lg">
-                                    Alışverişe Başla
-                                </a>
-                            </div>
-                        </div>
-                        <div className="col-md-6 text-center">
-                            <div className="rounded bg-white p-3 shadow mt-4 mt-md-0">
-                                <div className="row justify-content-center">
-                                    <div className="col-3">
-                                        <div className="bg-light rounded-circle p-3 mb-2">
-                                            <h3 className="m-0">12</h3>
+                                    <img
+                                        src={"https://localhost:7159/images/products/" + val.imageUrl}
+                                        className="card-img-top"
+                                        alt="Ürün 1"
+                                        style={{ width: "300px", height: "300px", objectFit: "cover" }}
+                                    />
+                                    <div className="card-body">
+                                        <div style={{ height: "60px" }}>
+                                            <h5 className="card-title">{val.name}</h5>
                                         </div>
-                                        <p className="small">Gün</p>
-                                    </div>
-                                    <div className="col-3">
-                                        <div className="bg-light rounded-circle p-3 mb-2">
-                                            <h3 className="m-0">03</h3>
+                                        <div className="d-flex flex-column mb-2">
+                                            <div className="text-warning d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <i className="bi bi-star-fill" />
+                                                    <i className="bi bi-star-fill" />
+                                                    <i className="bi bi-star-fill" />
+                                                    <i className="bi bi-star-fill" />
+                                                    <i className="bi bi-star-half" />
+                                                </div>
+                                                <small className="text-muted">(120)</small>
+                                            </div>
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                <span className="text-decoration-line-through text-muted me-2">
+                                                    {formatToTRY(val.price * 1.2)}
+                                                </span>
+                                                <span className="fw-bold text-danger">{formatToTRY(val.price)}</span>
+                                            </div>
                                         </div>
-                                        <p className="small">Saat</p>
-                                    </div>
-                                    <div className="col-3">
-                                        <div className="bg-light rounded-circle p-3 mb-2">
-                                            <h3 className="m-0">45</h3>
-                                        </div>
-                                        <p className="small">Dakika</p>
+                                        <button className="btn btn-primary w-100">Sepete Ekle</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* New Arrivals */}
-            <div className="container my-5">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Yeni Gelenler</h2>
-                    <a href="#" className="btn btn-outline-primary">
-                        Tümünü Gör
-                    </a>
-                </div>
-                <div className="row">
-                    {/* Product 1 */}
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card product-card h-100">
-                            <div className="position-absolute top-0 end-0 p-2">
-                                <span className="badge bg-success">Yeni</span>
-                            </div>
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/300/300"
-                                className="card-img-top"
-                                alt="Yeni Ürün 1"
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">Spor Ayakkabı</h5>
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <span className="fw-bold">₺1.299</span>
-                                    </div>
-                                    <div className="text-warning">
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star" />
-                                        <small className="text-muted">(23)</small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary w-100">Sepete Ekle</button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product 2 */}
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card product-card h-100">
-                            <div className="position-absolute top-0 end-0 p-2">
-                                <span className="badge bg-success">Yeni</span>
-                            </div>
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/300/300"
-                                className="card-img-top"
-                                alt="Yeni Ürün 2"
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">Kahve Makinesi</h5>
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <span className="fw-bold">₺2.499</span>
-                                    </div>
-                                    <div className="text-warning">
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-half" />
-                                        <i className="bi bi-star" />
-                                        <small className="text-muted">(15)</small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary w-100">Sepete Ekle</button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product 3 */}
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card product-card h-100">
-                            <div className="position-absolute top-0 end-0 p-2">
-                                <span className="badge bg-success">Yeni</span>
-                            </div>
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/300/300"
-                                className="card-img-top"
-                                alt="Yeni Ürün 3"
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">Akıllı Robot Süpürge</h5>
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <span className="fw-bold">₺4.999</span>
-                                    </div>
-                                    <div className="text-warning">
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <small className="text-muted">(8)</small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary w-100">Sepete Ekle</button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product 4 */}
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card product-card h-100">
-                            <div className="position-absolute top-0 end-0 p-2">
-                                <span className="badge bg-success">Yeni</span>
-                            </div>
-                            <img
-                                src="https://www.claudeusercontent.com/api/placeholder/300/300"
-                                className="card-img-top"
-                                alt="Yeni Ürün 4"
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">Yoga Matı</h5>
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <div>
-                                        <span className="fw-bold">₺349</span>
-                                    </div>
-                                    <div className="text-warning">
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-fill" />
-                                        <i className="bi bi-star-half" />
-                                        <small className="text-muted">(31)</small>
-                                    </div>
-                                </div>
-                                <button className="btn btn-primary w-100">Sepete Ekle</button>
-                            </div>
-                        </div>
-                    </div>
+                        )
+                    })};
                 </div>
             </div>
             {/* Features */}
@@ -455,35 +222,6 @@ function Home() {
                             <i className="bi bi-headset fs-1 text-primary mb-3" />
                             <h5>7/24 Destek</h5>
                             <p className="text-muted">Her zaman yanınızdayız</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Newsletter */}
-            <div className="container my-5">
-                <div className="row justify-content-center">
-                    <div className="col-md-10">
-                        <div className="card border-0 shadow">
-                            <div className="card-body p-4">
-                                <div className="row align-items-center">
-                                    <div className="col-md-6">
-                                        <h3>Bültenimize Abone Olun</h3>
-                                        <p className="text-muted mb-md-0">
-                                            En son kampanyalardan ve indirimlerden haberdar olun.
-                                        </p>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <form className="newsletter-form d-flex">
-                                            <input
-                                                type="email"
-                                                className="form-control"
-                                                placeholder="E-posta adresiniz"
-                                            />
-                                            <button className="btn btn-primary px-4">Abone Ol</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

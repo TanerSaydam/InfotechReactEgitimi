@@ -3,6 +3,7 @@ using GenericFileService.Files;
 using GenericRepository;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Slugify;
 using TS.Result;
 
 namespace eCommerce.Application.Categories;
@@ -22,11 +23,15 @@ internal sealed class CategoryCreateCommandHandler(
             return Result<string>.Failure("Kategori adı daha önce oluşturulmuş");
         }
 
-        string fileName = FileService.FileSaveToServer(request.File, "wwwroot/images/");
+        var slugHelper = new SlugHelper();
+        string slug = slugHelper.GenerateSlug(request.Name);
+
+        string fileName = FileService.FileSaveToServer(request.File, "wwwroot/images/categories/");
 
         Category category = new()
         {
             Name = request.Name,
+            UrlShortName = slug,
             ImageUrl = fileName
         };
         categoryRepository.Add(category);
