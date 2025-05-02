@@ -1,6 +1,32 @@
+import axios from 'axios';
 import '../styles/login.css';
+import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
 function Login() {
+    const navigate = useNavigate();
+    const [data, setData] = useState({});
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        try {
+            var res = await axios.post("https://localhost:7159/login", data);
+            localStorage.setItem("token", res.data.data);
+            document.location.href = "/";
+        } catch (error) {
+            alert(error.response.data.errorMessages[0]);
+        }
+    }
+
     return (
         <>
             <div className="login-container">
@@ -18,7 +44,7 @@ function Login() {
                                             style={{ fontSize: "3rem" }}
                                         />
                                     </div>
-                                    <form>
+                                    <form autoComplete='off' onSubmit={handleSubmit}>
                                         <div className="mb-4">
                                             <label htmlFor="email" className="form-label">
                                                 E-posta Adresi
@@ -28,9 +54,11 @@ function Login() {
                                                     <i className="bi bi-envelope text-muted" />
                                                 </span>
                                                 <input
-                                                    type="email"
+                                                    type="string"
                                                     className="form-control"
-                                                    id="email"
+                                                    id="userNameOrEmail"
+                                                    name="userNameOrEmail"
+                                                    onChange={handleChange}
                                                     placeholder="ornek@email.com"
                                                     required=""
                                                 />
@@ -48,25 +76,12 @@ function Login() {
                                                     type="password"
                                                     className="form-control"
                                                     id="password"
+                                                    name="password"
+                                                    onChange={handleChange}
                                                     placeholder="********"
                                                     required=""
                                                 />
                                             </div>
-                                        </div>
-                                        <div className="d-flex justify-content-between align-items-center mb-4">
-                                            <div className="form-check">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    id="rememberMe"
-                                                />
-                                                <label className="form-check-label" htmlFor="rememberMe">
-                                                    Beni Hatırla
-                                                </label>
-                                            </div>
-                                            <a href="#" className="text-decoration-none" style={{color: 'rgb(52 58 64) !important '}}>
-                                                Şifremi Unuttum
-                                            </a>
                                         </div>
                                         <button type="submit" className="btn btn-primary w-100 py-2 mb-4">
                                             Giriş Yap

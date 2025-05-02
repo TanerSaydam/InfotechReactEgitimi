@@ -1,4 +1,6 @@
-﻿using eCommerce.Infrastructure.Context;
+﻿using eCommerce.Domain.Users;
+using eCommerce.Infrastructure.Context;
+using eCommerce.Infrastructure.Options;
 using GenericRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +17,8 @@ public static class InfrastructureRegistrar
             options.UseSqlServer(configuration.GetConnectionString("SqlServer"));
         });
 
+        services.AddIdentityCore<AppUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+
         services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
 
         services.Scan(srv => srv
@@ -24,6 +28,8 @@ public static class InfrastructureRegistrar
         .AsImplementedInterfaces()
         .WithScopedLifetime()
         );
+
+        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
 
         return services;
     }

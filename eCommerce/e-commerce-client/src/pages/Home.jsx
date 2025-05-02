@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useCountStore } from "../states/count.state";
 
 function Home() {
+    const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
+    const { inc } = useCountStore();
 
     function formatToTRY(value) {
         return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 2 }).format(value);
@@ -20,6 +23,29 @@ function Home() {
         const response = await axios.get("https://localhost:7159/products?pageSize=8&pageNumber=1&orderByPrice=asc");
         setProducts(response.data.data);
     };
+
+
+    async function addBasket(productId) {
+        const token = localStorage.getItem("token");
+        if(!token){
+            navigate("/login");
+            return;
+        }
+
+        try {
+            var res = await axios.post("https://localhost:7159/carts", {productId: productId},{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            alert(res.data.data);
+            inc();
+        } catch (error) {
+            console.log(error);
+            alert("Bir hata oluştu");
+        }
+    }
 
     useEffect(() => {
         getCategories();
@@ -185,7 +211,7 @@ function Home() {
                                                 <span className="fw-bold text-danger">{formatToTRY(val.price)}</span>
                                             </div>
                                         </div>
-                                        <button className="btn btn-primary w-100">Sepete Ekle</button>
+                                        <button className="btn btn-primary w-100" onClick={() => addBasket(val.id)}>Sepete Ekle</button>
                                     </div>
                                 </div>
                             </div>

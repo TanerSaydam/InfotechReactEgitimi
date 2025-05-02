@@ -1,15 +1,20 @@
+using System.Text;
 using Bogus;
 using eCommerce.Application;
+using eCommerce.Application.Auth;
 using eCommerce.Application.Categories;
 using eCommerce.Application.Products;
 using eCommerce.Domain.Categories;
 using eCommerce.Domain.Dtos;
 using eCommerce.Domain.Products;
 using eCommerce.Infrastructure;
+using eCommerce.WebAPI.Endpoinst;
 using GenericRepository;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using TS.Result;
 
@@ -21,8 +26,29 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAntiforgery();
 
 builder.Services.AddOpenApi();
-
 builder.Services.AddCors();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(opt =>
+{
+    SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:SecretKey").Value!));
+    opt.TokenValidationParameters = new()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        ValidIssuer = builder.Configuration.GetSection("Jwt:Issuer").Value,
+        ValidAudience = builder.Configuration.GetSection("Jwt:Audience").Value,
+        IssuerSigningKey = securityKey
+    };
+});
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -38,6 +64,10 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .SetPreflightMaxAge(TimeSpan.FromMinutes(10)));
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+//Categories
 app.MapPost("categories",
     async ([FromForm] CategoryCreateCommand request, ISender sender, CancellationToken cancellationToken) =>
     {
@@ -47,6 +77,7 @@ app.MapPost("categories",
     .Produces<Result<string>>()
     .DisableAntiforgery();
 
+//Categories
 app.MapGet("categories",
     async (ISender sender, CancellationToken cancellationToken) =>
     {
@@ -55,6 +86,7 @@ app.MapGet("categories",
     })
     .Produces<List<CategoryGetAllQueryResponse>>();
 
+//Seed Data Categories
 app.MapPost("seed-data/categories",
     async (ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, CancellationToken cancellationToken) =>
     {
@@ -97,6 +129,7 @@ app.MapPost("seed-data/categories",
         return Results.Ok();
     });
 
+//Products
 app.MapGet("products",
     async (int pageSize, int pageNumber, string? categoryUrlShortName, string OrderByPrice, ISender sender, CancellationToken cancellationToken) =>
     {
@@ -105,6 +138,7 @@ app.MapGet("products",
     })
     .Produces<PaginationResult<ProductGetAllQueryResponse>>();
 
+//Seed Data Products
 app.MapPost("seed-data/products",
     async (
         IProductRepository productRepository,
@@ -145,5 +179,31 @@ app.MapPost("seed-data/products",
 
         return Results.Ok();
     });
+
+//Register
+app.MapPost("register",
+    async (
+        RegisterCommand request,
+        ISender sender,
+        CancellationToken cancellationToken) =>
+    {
+        var response = await sender.Send(request, cancellationToken);
+        return response.IsSuccessful ? Results.Ok(response) : Results.InternalServerError(response);
+    })
+    .Produces<Result<string>>();
+
+//Login
+app.MapPost("login",
+    async (
+        LoginCommand request,
+        ISender sender,
+        CancellationToken cancellationToken) =>
+    {
+        var response = await sender.Send(request, cancellationToken);
+        return response.IsSuccessful ? Results.Ok(response) : Results.InternalServerError(response);
+    })
+    .Produces<Result<string>>();
+
+app.MapCarts();
 
 app.Run();

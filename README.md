@@ -4,6 +4,7 @@
 - [ ] Vite : https://vite.dev/
 - [ ] React Router : https://reactrouter.com/
 - [ ] Bootstrap : https://getbootstrap.com/
+- [ ] Zustand: https://zustand-demo.pmnd.rs/ => State Management için
 
 ## i18n Kurulumu
 ```bash
@@ -70,6 +71,11 @@ function Home() {
 
 export default Home;
 ```
+
+## 02.05.2025
+- Register/Login işlemlerini tamamladık
+- Sepet işlemlerini tamamladık
+- State Management ile sepete ürün eklendiğinde sepet adedini güncelledik
 
 ## 30.04.2025
 - Product listesini React'da görüntüledik

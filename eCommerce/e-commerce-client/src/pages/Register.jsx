@@ -1,6 +1,31 @@
+import { useState } from 'react';
 import '../styles/register.css';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
 
 function Register() {
+    const navigate = useNavigate();
+    const [data, setData] = useState({});
+
+    function handleChange(event) {
+        const { name, value } = event.target;
+        setData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
+
+    async function register(event) {
+        event.preventDefault();
+        try {
+            var res = await axios.post("https://localhost:7159/register",data);
+            localStorage.setItem("token", res.data.data);
+            document.location.href = "/";
+        } catch (error) {
+            alert(error.response.data.errorMessages[0]);
+        }
+    }
+
     return (
         <>
             <div className="register-container">
@@ -21,7 +46,7 @@ function Register() {
                                             Hesap oluşturarak alışverişin keyfini çıkarın
                                         </p>
                                     </div>
-                                    <form>
+                                    <form autoComplete='off' onSubmit={register}>
                                         <div className="row">
                                             <div className="col-md-6 mb-3">
                                                 <label htmlFor="firstName" className="form-label">
@@ -35,6 +60,8 @@ function Register() {
                                                         type="text"
                                                         className="form-control"
                                                         id="firstName"
+                                                        name="firstName"
+                                                        onChange={handleChange}
                                                         placeholder="Adınız"
                                                         required=""
                                                     />
@@ -52,6 +79,8 @@ function Register() {
                                                         type="text"
                                                         className="form-control"
                                                         id="lastName"
+                                                        name="lastName"
+                                                        onChange={handleChange}
                                                         placeholder="Soyadınız"
                                                         required=""
                                                     />
@@ -70,12 +99,36 @@ function Register() {
                                                     type="email"
                                                     className="form-control"
                                                     id="email"
+                                                    name="email"
+                                                    onChange={handleChange}
                                                     placeholder="ornek@email.com"
                                                     required=""
                                                 />
                                             </div>
                                             <small className="form-text text-muted">
                                                 E-posta adresiniz giriş bilgisi olarak kullanılacaktır
+                                            </small>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="userName" className="form-label">
+                                                Kullanıcı Adı
+                                            </label>
+                                            <div className="input-group">
+                                                <span className="input-group-text bg-light">
+                                                    <i className="bi bi-person text-muted" />
+                                                </span>
+                                                <input
+                                                    type="string"
+                                                    className="form-control"
+                                                    id="userName"
+                                                    name="userName"
+                                                    onChange={handleChange}
+                                                    placeholder="jhon"
+                                                    required=""
+                                                />
+                                            </div>
+                                            <small className="form-text text-muted">
+                                                Kullanıcı adınız giriş bilgisi olarak kullanılacaktır
                                             </small>
                                         </div>
                                         <div className="mb-3">
@@ -90,6 +143,8 @@ function Register() {
                                                     type="tel"
                                                     className="form-control"
                                                     id="phone"
+                                                    name="phoneNumber"
+                                                    onChange={handleChange}
                                                     placeholder="05XX XXX XXXX"
                                                 />
                                             </div>
@@ -106,6 +161,8 @@ function Register() {
                                                     type="password"
                                                     className="form-control"
                                                     id="password"
+                                                    name="password"
+                                                    onChange={handleChange}
                                                     placeholder="********"
                                                     required=""
                                                 />
@@ -113,23 +170,6 @@ function Register() {
                                             <small className="form-text text-muted">
                                                 En az 8 karakter, bir büyük harf ve bir rakam içermelidir
                                             </small>
-                                        </div>
-                                        <div className="mb-4">
-                                            <label htmlFor="confirmPassword" className="form-label">
-                                                Şifre Tekrarı
-                                            </label>
-                                            <div className="input-group">
-                                                <span className="input-group-text bg-light">
-                                                    <i className="bi bi-lock-fill text-muted" />
-                                                </span>
-                                                <input
-                                                    type="password"
-                                                    className="form-control"
-                                                    id="confirmPassword"
-                                                    placeholder="********"
-                                                    required=""
-                                                />
-                                            </div>
                                         </div>
                                         <div className="mb-4">
                                             <div className="form-check">

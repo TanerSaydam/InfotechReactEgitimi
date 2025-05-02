@@ -1,17 +1,33 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
+import { useCountStore } from "../states/count.state";
 
 function Layout() {
+    const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
+    const [isLogin, setIsLogin] = useState(false);
+    const { count, fetch} = useCountStore();
 
     async function getCategories() {
         const response = await axios.get("https://localhost:7159/categories");
         setCategories(response.data);
     };
 
+    function checkLogin(){
+        localStorage.getItem("token") ? setIsLogin(true) : setIsLogin(false);
+    }
+
+
+    function logout(){
+        localStorage.removeItem("token");
+        setIsLogin(false);
+        navigate("/login");
+    }
     useEffect(() => {
         getCategories();
+        checkLogin();
+        fetch();
     },[]);
 
     return (
@@ -54,7 +70,7 @@ function Layout() {
                                 <ul className="dropdown-menu">
                                     {categories.map((val,i) => {
                                         return(
-                                            <li>
+                                            <li key={i}>
                                                 <a className="dropdown-item" href={"/products/" + val.urlShortName}>
                                                     {val.name}
                                                 </a>
@@ -65,35 +81,28 @@ function Layout() {
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/orders">
-                                    Siparilerim
+                                    Siparişlerim
                                 </Link>
                             </li>
                         </ul>
-                        <form className="d-flex me-3">
-                            <div className="input-group">
-                                <input
-                                    className="form-control"
-                                    type="search"
-                                    placeholder="Ürün Ara"
-                                />
-                                <button className="btn btn-outline-dark" type="submit">
-                                    <i className="bi bi-search" />
-                                </button>
-                            </div>
-                        </form>
                         <div className="d-flex">
-                            <Link to="/my-profile" className="btn btn-outline-dark me-2">
-                                <i className="bi bi-person" />
-                            </Link>
-                            <Link to="/login" className="btn btn-outline-dark me-2">
-                                <i className="bi bi-lock" />
-                            </Link>
-                            <Link to="/carts" className="btn btn-outline-dark position-relative">
-                                <i className="bi bi-cart" />
-                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    3
-                                </span>
-                            </Link>
+                            {
+                            isLogin ? (
+                                <>
+                                <Link to="/carts" className="btn btn-outline-dark position-relative me-2">
+                                    <i className="bi bi-cart" />
+                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {count > 0 ? count : ""}
+                                    </span>
+                                </Link>
+                                <a onClick={logout} className="btn btn-outline-dark">
+                                    <i className="bi bi-power" />
+                                </a>
+                                </>
+                            ) : <Link to="/login" className="btn btn-outline-dark me-2">
+                                    <i className="bi bi-lock" />
+                                </Link>
+                            }
                         </div>
                     </div>
                 </div>
